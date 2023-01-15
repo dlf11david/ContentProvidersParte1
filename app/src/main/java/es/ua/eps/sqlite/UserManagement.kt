@@ -13,11 +13,15 @@ class UserManagement : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityUserManagementBinding.inflate(layoutInflater)
         val sqlUsers = SQLiteCode(this)
-        val db = sqlUsers.readableDatabase
-        val cursor = db.rawQuery("SELECT nombre_usuario FROM usuarios", null)
+        val cursor = contentResolver.query(
+            ProviderCode.CONTENT_URI,
+            arrayOf(ProviderCode.NOMBRE_USUARIO),
+            null,
+            null,
+            null)
         setContentView(binding.root)
         var spinner_data = arrayOf<String>()
-        if (cursor.moveToFirst()) {
+        if (cursor!!.moveToFirst()) {
             do {
                 spinner_data += cursor.getString(0).toString()
             } while (cursor.moveToNext())
