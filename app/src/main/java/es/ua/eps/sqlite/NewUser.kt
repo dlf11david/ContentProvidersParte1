@@ -1,5 +1,6 @@
 package es.ua.eps.sqlite
 
+import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,7 +10,6 @@ class NewUser : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityNewUserBinding.inflate(layoutInflater)
-        val sqlUsers = SQLiteCode(this)
         setContentView(binding.root)
         with(binding) {
             btnNewBack.setOnClickListener {
@@ -20,12 +20,12 @@ class NewUser : AppCompatActivity() {
                     etNewPass.text.isNotBlank() &&
                     etNewName.text.isNotBlank()) {
 
-                    sqlUsers.addData(
-                            "${etNewLogin.text}",
-                            "${etNewPass.text}",
-                            "${etNewName.text}",
-                            "${etNewLogin.text}@mail.ua"
-                    )
+                    val cv = ContentValues()
+                    cv.put(ProviderCode.NOMBRE_USUARIO,"${etNewLogin.text}")
+                    cv.put(ProviderCode.PASSWORD,"${etNewPass.text}")
+                    cv.put(ProviderCode.NOMBRE_COMPLETO,"${etNewName.text}")
+                    cv.put(ProviderCode.EMAIL,"${etNewLogin.text}@mail.ua")
+                    contentResolver.insert(ProviderCode.CONTENT_URI,cv)
 
                     etNewLogin.text.clear()
                     etNewPass.text.clear()
