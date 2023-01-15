@@ -60,6 +60,12 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <provider
+            android:authorities="es.ua.eps.sqlite"
+            android:name=".ProviderCode"
+            android:exported="true"
+            android:grantUriPermissions="true">
+        </provider>
     </application>
 
 </manifest>

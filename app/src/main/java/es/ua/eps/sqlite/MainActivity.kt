@@ -14,6 +14,14 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val sqlUsers = SQLiteCode(this)
         val db = sqlUsers.readableDatabase
+        with(ProviderCode) {
+            val rs = contentResolver.query(
+                CONTENT_URI,
+                arrayOf(_ID,NOMBRE_USUARIO, PASSWORD, NOMBRE_COMPLETO, EMAIL),
+                null,
+                null,
+                null)
+        }
         setContentView(binding.root)
         with(binding) {
             btnLogin.setOnClickListener{
