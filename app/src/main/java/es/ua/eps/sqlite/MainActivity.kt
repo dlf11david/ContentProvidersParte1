@@ -12,27 +12,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
-        val sqlUsers = SQLiteCode(this)
-        val db = sqlUsers.readableDatabase
-        with(ProviderCode) {
-            val rs = contentResolver.query(
-                CONTENT_URI,
-                arrayOf(_ID,NOMBRE_USUARIO, PASSWORD, NOMBRE_COMPLETO, EMAIL),
-                null,
-                null,
-                null)
-        }
         setContentView(binding.root)
         with(binding) {
             btnLogin.setOnClickListener{
                 if (etUser.text.isNotBlank() &&
                     etPass.text.isNotBlank()) {
-
-                    val cursor = db.rawQuery(
-                        "SELECT nombre_completo, nombre_usuario FROM usuarios " +
-                                "WHERE nombre_usuario = '${etUser.text}' AND password = '${etPass.text}'", null)
-
-                    if (cursor.moveToFirst()) {
+                    val cursor = contentResolver.query(
+                        ProviderCode.CONTENT_URI,
+                        arrayOf(ProviderCode.NOMBRE_COMPLETO, ProviderCode.NOMBRE_USUARIO),
+                        "${ProviderCode.NOMBRE_USUARIO} = ? AND ${ProviderCode.PASSWORD} = ?",
+                        arrayOf(etUser.text.toString(),etPass.text.toString()),
+                        null)
+                    if (cursor!!.moveToFirst()) {
                         welcomeName = cursor.getString(0).toString()
                         userName = cursor.getString(1).toString()
                         cursor.close()
