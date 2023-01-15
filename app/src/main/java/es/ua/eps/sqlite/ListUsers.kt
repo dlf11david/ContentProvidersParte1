@@ -9,13 +9,16 @@ class ListUsers : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityListUsersBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val sqlUsers = SQLiteCode(this)
-        val db = sqlUsers.readableDatabase
-        val cursor = db.rawQuery("SELECT nombre_usuario, email FROM usuarios", null)
+        val cursor = contentResolver.query(
+            ProviderCode.CONTENT_URI,
+            arrayOf(ProviderCode.NOMBRE_USUARIO, ProviderCode.EMAIL),
+            null,
+            null,
+            null)
         with(binding) {
             tvList.text = "Name & Email: \n"
 
-            if (cursor.moveToFirst()) {
+            if (cursor!!.moveToFirst()) {
                 do {
                     tvList.append(cursor.getString(0).toString()+": ")
                     tvList.append(cursor.getString(1).toString()+"\n")
